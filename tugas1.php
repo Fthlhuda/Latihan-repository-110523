@@ -40,16 +40,16 @@
     <br>
     <ul class="nav justify-content-center">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Active</a>
+            <a class="nav-link active" aria-current="page" href="../hari 1/Fathul Huda/tugas1.php">Hari 1</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="../hari 2/tugas1.php">Hari 2</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="../hari 3/tugas1.php">Hari 3</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
+            <a class="nav-link disabled">Hari 4</a>
         </li>
     </ul>
     <div class="box">
@@ -104,7 +104,20 @@
                                     </select>
                                     <label for="fsTahun">Tahun Daftar</label>
                                 </div>
-
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="jenkel"
+                                        id="w" value="Pria">
+                                    <label class="form-check-label" for="fsJenis">
+                                        Pria
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="jenkel"
+                                        id="w" value="Wanita">
+                                    <label class="form-check-label" for="fsJenis">
+                                        Wanita
+                                    </label>
+                                </div>
                                 <input type="submit" name="submit" class="btn btn-success mt-3 col-12" value="Daftar">
                             </form>
                         </div>
@@ -122,15 +135,13 @@
                                             <th>ALAMAT</th>
                                             <th>PROGRAM PELATIHAN</th>
                                             <th>TAHUN</th>
+                                            <th>JENIS KELAMIN</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
                                 </table>
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>
@@ -151,6 +162,23 @@
     </script>
     <script>
     $(document).ready(function() {
+        //even ketika disubmit
+        getData();
+
+        function getData() {
+            $.ajax({
+                type: "GET",
+                url: "get_data.php",
+                beforeSend: function(result) {
+                    $(".spinner-border").show(1000);
+                },
+                success: function(result) {
+                    $(".spinner-border").hide(3000);
+                    $("tbody").html(result);
+                    $("#reload")[0].reset();
+                }
+            })
+        }
         // even ketika form di submit
         $("form").submit(function(event) {
             //
@@ -161,12 +189,14 @@
             var alamat = $("#floatingTextarea").val();
             var program = $("#floatingSelect").val();
             var tahun = $("#fsTahun").val();
+            var jenis = $(".form-check-input:checked").val();
             var formData = {
                 nama: nama,
                 email: email,
                 alamat: alamat,
                 program: program,
-                tahun: tahun
+                tahun: tahun,
+                jenis: jenis
             }
             $.ajax({
                 type: "POST",
@@ -179,6 +209,7 @@
                     $(".spinner-border").hide(3000);
                     $("tbody").append(result);
                     $("#reload")[0].reset();
+                    getData();
                 }
             })
         })
